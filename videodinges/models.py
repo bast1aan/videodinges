@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from typing import NamedTuple, Optional
+from typing import NamedTuple, Optional, Union
 
 from django.db import models
 from django.db.models import constraints
@@ -83,3 +83,12 @@ def get_quality_by_name(name: str) -> Optional[Quality]:
 	for quality in qualities:
 		if quality.name == name:
 			return quality
+
+def get_short_name_of_transcoding_type(transcoding_type: Union[str, TranscodingType]) -> str:
+	if isinstance(transcoding_type, str):
+		for type_ in transcoding_types:
+			if type_.name == transcoding_type:
+				transcoding_type = type_
+
+	if isinstance(transcoding_type, TranscodingType):
+		return transcoding_type.short_name
