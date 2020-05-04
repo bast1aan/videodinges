@@ -1,8 +1,13 @@
 from datetime import datetime
-from collections import namedtuple
+from typing import NamedTuple
+
 from django.db import models
 
-Quality = namedtuple('Quality', ['name', 'width', 'height', 'priority'])
+class Quality(NamedTuple):
+	name: str
+	width: int
+	height: int
+	priority: int
 
 qualities = (
     Quality(name='360p', width=640, height=360, priority=1),
