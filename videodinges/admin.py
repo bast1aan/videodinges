@@ -21,7 +21,6 @@ class TranscodingsInline(admin.StackedInline):
 	model = models.Transcoding
 	form = TranscodingsForm
 	fields = ['quality', 'url', 'upload']
-	#inline = [UploadsInline]
 	extra = 0
 
 class VideoAdmin(admin.ModelAdmin):
