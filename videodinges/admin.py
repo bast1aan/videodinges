@@ -20,7 +20,7 @@ class TranscodingsForm(forms.ModelForm):
 class TranscodingsInline(admin.StackedInline):
 	model = models.Transcoding
 	form = TranscodingsForm
-	fields = ['quality', 'url', 'upload']
+	fields = ['quality', 'type', 'url', 'upload']
 	extra = 0
 
 class VideoAdmin(admin.ModelAdmin):
