@@ -46,6 +46,8 @@ class Transcoding(models.Model):
     def quality_obj(self):
         return get_quality_by_name(self.quality)
 
+    class Meta:
+        unique_together = ('video', 'quality')
 
 def get_quality_by_name(name: str) -> Optional[Quality]:
 	for quality in qualities:
