@@ -20,7 +20,7 @@ qualities = (
 class Video(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=256)
-    slug = models.CharField(max_length=256)
+    slug = models.CharField(max_length=256, unique=True)
     description = models.TextField()
     created_at = models.DateTimeField(default=datetime.now)
     updated_at = models.DateTimeField(default=datetime.now)
