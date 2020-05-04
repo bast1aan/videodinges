@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import NamedTuple
+from typing import NamedTuple, Optional
 
 from django.db import models
 
@@ -29,9 +29,25 @@ class Video(models.Model):
         self.updated_at = datetime.now()
         super().save(force_insert, force_update, using, update_fields)
 
+    def __str__(self):
+        return self.title
+
 
 class Transcoding(models.Model):
     id = models.AutoField(primary_key=True)
-    video = models.ForeignKey(Video, on_delete=models.CASCADE)
+    video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='transcodings')
     quality = models.CharField(choices=((quality.name, quality.name) for quality in qualities), max_length=128)
     file = models.FileField()
+
+    def __str__(self):
+        return self.quality
+
+    @property
+    def quality_obj(self):
+        return get_quality_by_name(self.quality)
+
+
+def get_quality_by_name(name: str) -> Optional[Quality]:
+	for quality in qualities:
+		if quality.name == name:
+			return quality

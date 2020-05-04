@@ -16,6 +16,11 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
+from . import testviews
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 ]
+
+for i in testviews.__all__:
+	urlpatterns.append(url(r'^test/{}$'.format(i), testviews.__dict__[i]))
