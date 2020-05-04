@@ -25,7 +25,7 @@ class TranscodingsInline(admin.StackedInline):
 
 class VideoAdmin(admin.ModelAdmin):
 	model = models.Video
-	fields = ['title', 'description', 'slug']
+	fields = ['title', 'description', 'slug', 'poster', 'og_image', 'created_at']
 	inlines = [TranscodingsInline]
 
 admin.site.register(models.Video, VideoAdmin)
