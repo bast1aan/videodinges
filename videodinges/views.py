@@ -57,7 +57,7 @@ def _get_qualities(video: models.Video) -> Dict[str, List[models.Transcoding]]:
 	qualities = defaultdict(list)
 	for transcoding in transcodings:
 		qualities[transcoding.quality_obj.name].append(transcoding)
-	return qualities
+	return dict(qualities)
 
 def _url_for(transcoding: models.Transcoding) -> str:
 	if transcoding.url:
