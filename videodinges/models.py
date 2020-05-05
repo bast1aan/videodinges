@@ -41,6 +41,9 @@ class Upload(models.Model):
 	def __str__(self):
 		return os.path.basename(self.file.path)
 
+	class Meta:
+		db_table = 'uploads'
+
 class Video(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=256)
@@ -62,6 +65,7 @@ class Video(models.Model):
 
     class Meta:
         indexes = [models.Index(fields=['slug']), models.Index(fields=['created_at'])]
+        db_table = 'videos'
 
 class Transcoding(models.Model):
     id = models.AutoField(primary_key=True)
@@ -85,6 +89,7 @@ class Transcoding(models.Model):
                        constraints.CheckConstraint(check=~(Q(upload__isnull=False) & Q(url__isnull=False)),
                                                    name='upload_and_url_cannot_both_be_filled'),
                       ]
+        db_table = 'transcodings'
 
 def get_quality_by_name(name: str) -> Optional[Quality]:
 	for quality in qualities:
