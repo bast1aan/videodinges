@@ -27,6 +27,8 @@ class VideoAdmin(admin.ModelAdmin):
 	model = models.Video
 	fields = ['title', 'description', 'slug', 'poster', 'og_image', 'created_at']
 	inlines = [TranscodingsInline]
+	list_display = ('title', 'slug', 'created_at', 'updated_at')
+	ordering = ('-created_at', )
 
 admin.site.register(models.Video, VideoAdmin)
 admin.site.register(models.Upload)
