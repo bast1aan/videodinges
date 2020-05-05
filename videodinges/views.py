@@ -28,6 +28,7 @@ def video(request: HttpRequest, slug: str) -> HttpResponse:
 	template_data.update(
 		width=quality[0].quality_obj.width,
 		height=quality[0].quality_obj.height,
+		current_quality=quality[0].quality_obj.name
 	)
 
 	template_data['sources'] = [

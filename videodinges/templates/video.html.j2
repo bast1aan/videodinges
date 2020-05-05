@@ -16,7 +16,12 @@
 </video><br />
 <p>
 {% for quality in qualities %}
-<a href="{{ slug }}.html?quality={{ quality }}" onclick="vidTimeInUrl(this);">{{ quality }} versie</a>{% if not loop.last %} | {% endif %}
+	{% if quality == current_quality %}
+	<strong>{{ quality }} versie</strong>
+	{% else %}
+	<a href="{{ slug }}.html?quality={{ quality }}" onclick="vidTimeInUrl(this);">{{ quality }} versie</a>
+	{% endif %}
+	{% if not loop.last %}|{% endif %}
 {% endfor %}
 </p>
 <p>
