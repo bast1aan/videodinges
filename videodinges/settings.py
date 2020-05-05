@@ -66,6 +66,12 @@ TEMPLATES = [
             ],
         },
     },
+    {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'DIRS': [os.path.join(BASE_DIR, 'videodinges', 'templates')],
+        'APP_DIRS': False,
+        'OPTIONS': {},
+    },
 ]
 
 WSGI_APPLICATION = 'videodinges.wsgi.application'
