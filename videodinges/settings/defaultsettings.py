@@ -137,3 +137,5 @@ FILE_UPLOAD_HANDLERS = ['django.core.files.uploadhandler.TemporaryFileUploadHand
 FILE_UPLOAD_MAX_MEMORY_SIZE = 2147483648  # 2GB
 
 FILE_UPLOAD_TEMP_DIR = os.path.join(BASE_DIR, 'tmp')  # probably default /tmp is too small for video files
+
+URL_BASE = ''  # usefull to prefix the application URL on deployment
