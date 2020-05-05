@@ -25,7 +25,7 @@ class TranscodingsInline(admin.StackedInline):
 
 class VideoAdmin(admin.ModelAdmin):
 	model = models.Video
-	fields = ['title', 'description', 'slug', 'poster', 'og_image', 'created_at']
+	fields = ['title', 'description', 'slug', 'poster', 'og_image', 'created_at', 'default_quality']
 	inlines = [TranscodingsInline]
 	list_display = ('title', 'slug', 'created_at', 'updated_at')
 	ordering = ('-created_at', )
