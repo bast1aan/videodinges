@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.abspath(os.path.join(os.path.abspath(__file__), '..', '..', '..'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -137,4 +137,3 @@ FILE_UPLOAD_HANDLERS = ['django.core.files.uploadhandler.TemporaryFileUploadHand
 FILE_UPLOAD_MAX_MEMORY_SIZE = 2147483648  # 2GB
 
 FILE_UPLOAD_TEMP_DIR = os.path.join(BASE_DIR, 'tmp')  # probably default /tmp is too small for video files
-
