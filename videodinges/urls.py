@@ -22,6 +22,7 @@ from . import testviews, views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^$', views.index),
     url(r'^(?P<slug>[\w-]+).html', views.video)
 ]
 

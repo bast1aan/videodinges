@@ -53,6 +53,10 @@ def video(request: HttpRequest, slug: str) -> HttpResponse:
 
 	return render(request, 'video.html.j2', template_data, using='jinja2')
 
+def index(request: HttpRequest) -> HttpResponse:
+	videos = models.Video.objects.order_by('-created_at').all()
+	return render(request, 'index.html.j2', dict(videos=videos), using='jinja2')
+
 def _get_dict_from_models_with_fields(model, *fields: str) -> Dict[str, Any]:
 	ret = {}
 	for field in fields:

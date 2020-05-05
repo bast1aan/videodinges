@@ -1,0 +1,10 @@
+<html>
+<body>
+<h1>Video's</h1>
+<ul>
+	{% for video in videos %}
+	<li><a href="{{ video.slug }}.html">{{ video.title }}</a></li>
+	{% endfor %}
+</ul>
+</body>
+</html>
