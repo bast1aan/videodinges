@@ -59,7 +59,7 @@ class Video(models.Model):
         return self.title
 
     class Meta:
-        indexes = [models.Index(fields=['slug'])]
+        indexes = [models.Index(fields=['slug']), models.Index(fields=['created_at'])]
 
 class Transcoding(models.Model):
     id = models.AutoField(primary_key=True)
