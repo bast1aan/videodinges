@@ -16,10 +16,11 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from . import testviews
+from . import testviews, views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^(?P<slug>[\w-]+).html', views.video)
 ]
 
 for i in testviews.__all__:

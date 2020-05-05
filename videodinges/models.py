@@ -58,6 +58,9 @@ class Video(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        indexes = [models.Index(fields=['slug'])]
+
 class Transcoding(models.Model):
     id = models.AutoField(primary_key=True)
     video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='transcodings')
