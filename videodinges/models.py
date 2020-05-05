@@ -48,6 +48,8 @@ class Video(models.Model):
     description = models.TextField()
     poster = models.OneToOneField(Upload, on_delete=models.PROTECT, blank=True, null=True, related_name='video_poster')
     og_image = models.OneToOneField(Upload, on_delete=models.PROTECT, blank=True, null=True, related_name='video_og_image')
+    default_quality = models.CharField(choices=((quality.name, quality.name) for quality in qualities),
+                                       max_length=128, blank=True, null=True)
     created_at = models.DateTimeField(default=datetime.now)
     updated_at = models.DateTimeField(default=datetime.now)
 

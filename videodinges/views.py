@@ -21,9 +21,15 @@ def video(request: HttpRequest, slug: str) -> HttpResponse:
 
 	qualities = _get_qualities(video)
 	try:
+		# find quality specified by URL param
 		quality = qualities[request.GET['quality']]
 	except:
-		quality = next(iter(qualities.values()))
+		# find quality specified by default quality specified for video
+		try:
+			quality = qualities[video.default_quality]
+		except:
+			# take default first quality
+			quality = next(iter(qualities.values()))
 
 	template_data.update(
 		width=quality[0].quality_obj.width,
