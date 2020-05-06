@@ -1,6 +1,6 @@
 from django.test import TestCase
 from videodinges.models import Video
-from datetime import datetime, date
+from datetime import datetime
 
 class VideoTestCase(TestCase):
 	def setUp(self):
@@ -12,4 +12,4 @@ class VideoTestCase(TestCase):
 		self.assertEqual(video.title, 'Title')
 		self.assertEqual(video.description, 'Description')
 		self.assertIsInstance(video.created_at, datetime)
-		self.assertIsInstance(video.updated_at, str)
+		self.assertIsInstance(video.updated_at, datetime)
