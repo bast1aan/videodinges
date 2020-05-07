@@ -16,7 +16,8 @@ def create(model: Type[T], **kwargs) -> T:
 		return models.Video.objects.create(**{**dict(title='Title', slug='slug', description='Description'), **kwargs})
 
 	if model is models.Transcoding:
-		video = create(models.Video, title='Title', slug='slug', description='Description')
+		video = create(models.Video, title='Title', slug='slug', description='Description') \
+			if 'video' not in kwargs else None
 		return models.Transcoding.objects.create(
 			**{
 				**dict(
@@ -34,7 +35,9 @@ def create(model: Type[T], **kwargs) -> T:
 
 @override_settings(MEDIA_ROOT=tempfile.mkdtemp())
 def _upload(**kwargs):
-	return models.Upload.objects.create(**{**dict(file=SimpleUploadedFile('some_file.txt', b'some contents')), **kwargs})
+	file = SimpleUploadedFile('some_file.txt', b'some contents') \
+		if 'file' not in kwargs else None
+	return models.Upload.objects.create(**{**dict(file=file), **kwargs})
 
 
 # TODO fix annoying dict notation to something more gentle.
