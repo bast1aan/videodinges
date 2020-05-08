@@ -161,3 +161,67 @@ class VideoTestCase(TestCase):
 			srctag.format(url=transcoding4.url, type=transcoding4.type),
 			content,
 		)
+
+	def test_video_shows_correct_quality_for_parameter(self):
+
+		video = factories.create(
+			models.Video,
+			title='Vid 1',
+			slug='vid-1',
+		)
+		transcoding1 = factories.create(
+			models.Transcoding,
+			video=video,
+			quality='480p',
+			type='video/webm',
+			url='http://480p.webm',
+		)
+		transcoding2 = factories.create(
+			models.Transcoding,
+			video=video,
+			quality='480p',
+			type='video/mp4',
+			url='http://480p.mp4',
+		)
+		transcoding3 = factories.create(
+			models.Transcoding,
+			video=video,
+			quality='720p',
+			type='video/webm',
+			url='http://720p.webm',
+		)
+		transcoding4 = factories.create(
+			models.Transcoding,
+			video=video,
+			quality='720p',
+			type='video/mp4',
+			url='http://720p.mp4',
+		)
+
+		resp:HttpResponse = self.client.get(
+			reverse('video', args=['vid-1']) + '?quality=720p')
+
+		self.assertEqual(resp.status_code, 200)
+
+		content:str = resp.content.decode(resp.charset)
+
+		srctag = '<source src="{url}" type="{type}" />'
+
+		self.assertInHTML(
+			srctag.format(url=transcoding1.url, type=transcoding1.type),
+			content,
+			count=0
+		)
+		self.assertInHTML(
+			srctag.format(url=transcoding2.url, type=transcoding2.type),
+			content,
+			count=0
+		)
+		self.assertInHTML(
+			srctag.format(url=transcoding3.url, type=transcoding3.type),
+			content,
+		)
+		self.assertInHTML(
+			srctag.format(url=transcoding4.url, type=transcoding4.type),
+			content,
+		)
