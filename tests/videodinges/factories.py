@@ -18,17 +18,16 @@ def create(model: Type[T], **kwargs) -> T:
 	if model is models.Transcoding:
 		video = create(models.Video, title='Title', slug='slug', description='Description') \
 			if 'video' not in kwargs else None
-		return models.Transcoding.objects.create(
-			**{
-				**dict(
-					video=video,
-					quality=models.qualities[0].name,
-					type=str(models.transcoding_types[0]),
-					url='https://some_url',
-				),
-				**kwargs
-			}
+		defaults = dict(
+			video=video,
+			quality=models.qualities[0].name,
+			type=str(models.transcoding_types[0]),
 		)
+		if 'upload' not in kwargs:
+			# only URL if no upload for they are multually exclusive
+			defaults['url'] = 'https://some_url'
+
+		return models.Transcoding.objects.create(**{**defaults, **kwargs})
 
 	if model is models.Upload:
 		return _upload(**kwargs)
