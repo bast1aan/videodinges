@@ -203,3 +203,45 @@ class VideoTestCase(TestCase):
 		)
 
 		self.assertInHTML('<strong>720p versie</strong>', content)
+
+	def test_video_uploads_shows_correctly(self):
+
+		image = factories.create(models.Upload)
+		movie = factories.create(models.Upload)
+
+		video = factories.create(
+			models.Video,
+			title='Vid 1',
+			slug='vid-1',
+			poster=image,
+			og_image=image
+		)
+		transcoding = factories.create(
+			models.Transcoding,
+			video=video,
+			quality='480p',
+			type='video/webm',
+			upload=movie,
+		)
+
+		resp:HttpResponse = self.client.get(
+			reverse('video', args=['vid-1']) + '?quality=720p')
+
+		self.assertEqual(resp.status_code, 200)
+
+		content:str = resp.content.decode(resp.charset)
+
+		self.assertInHTML(
+			"""<video width="853" height="480" poster="{image}" controls="controls">
+				<source src="{url}" type='video/webm' />
+				You need a browser that understands HTML5 video and supports vp8 codecs.
+			</video>""".format(url=movie.file.url, image=image.file.url),
+			content,
+		)
+
+		self.assertInHTML(
+			'<meta property="og:image" content="{image}" />'.format(image=image.file.url),
+			content,
+		)
+
+
