@@ -11,12 +11,13 @@ class VideoTestCase(TestCase):
 	def setUp(self):
 		self.client = Client()
 
-	def test_video(self):
+	def test_video_view_renders_properly(self):
 
 		video = factories.create(
 			models.Video,
 			title='Vid 1',
 			slug='vid-1',
+			default_quality='480p',
 		)
 		transcoding1 = factories.create(
 			models.Transcoding,
@@ -48,12 +49,52 @@ class VideoTestCase(TestCase):
 		)
 
 		resp:HttpResponse = self.client.get(reverse('video', args=['vid-1']))
-		content:str = resp.content.decode(resp.charset)
-		# TODO: parse HTML, check for essential elements
-		self.assertEqual(resp.status_code, 200)
-		self.assertContains(resp, 'Vid 1')
-		#self.assertContains(resp, '')
-		#self.assertRegexpMatches(resp.content)
 
-		#self.assertContains(resp, 'Vid 2')
-		#self.assertContains(resp, 'vid-2.html')
+		self.assertEqual(resp.status_code, 200)
+
+		content:str = resp.content.decode(resp.charset)
+
+		srctag = '<source src="{url}" type="{type}" />'
+
+		self.assertInHTML(
+			srctag.format(url=transcoding1.url, type=transcoding1.type),
+			content,
+		)
+		self.assertInHTML(
+			srctag.format(url=transcoding2.url, type=transcoding2.type),
+			content
+		)
+		self.assertInHTML(
+			srctag.format(url=transcoding3.url, type=transcoding3.type),
+			content,
+			count=0
+		)
+		self.assertInHTML(
+			srctag.format(url=transcoding4.url, type=transcoding4.type),
+			content,
+			count=0
+		)
+
+		self.assertInHTML('<title>Vid 1</title>', content)
+
+		self.assertInHTML('<h1>Vid 1</h1>', content)
+
+		self.assertInHTML('<p>Description</p>', content)
+
+		self.assertInHTML('<strong>480p versie</strong>', content)
+
+		self.assertInHTML(
+			'<a href="vid-1.html?quality=720p" onclick="vidTimeInUrl(this);">720p versie</a>',
+			content
+		)
+
+		self.assertIn(
+			'You need a browser that understands HTML5 video and supports h.264 or vp8 codecs.',
+			content
+		)
+
+		self.assertInHTML(
+			'<script src="static/js/video.js" type="text/javascript"></script>',
+			content
+		)
+
