@@ -162,6 +162,14 @@ class VideoTestCase(TestCase):
 			content,
 		)
 
+		self.assertInHTML(
+			'<a href="vid-1.html?quality=480p" onclick="vidTimeInUrl(this);">480p versie</a>',
+			content
+		)
+
+		self.assertInHTML('<strong>720p versie</strong>', content)
+
+
 	def test_video_shows_correct_quality_for_parameter(self):
 
 		video = factories.create(
