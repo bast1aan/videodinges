@@ -57,22 +57,12 @@ class VideoTestCase(TestCase):
 		srctag = '<source src="{url}" type="{type}" />'
 
 		self.assertInHTML(
-			srctag.format(url=transcoding1.url, type=transcoding1.type),
+			"""<video width="853" height="480" controls="controls">
+				<source src="http://480p.mp4" type='video/mp4' />
+				<source src="http://480p.webm" type='video/webm' />
+				You need a browser that understands HTML5 video and supports h.264 or vp8 codecs.
+			</video>""",
 			content,
-		)
-		self.assertInHTML(
-			srctag.format(url=transcoding2.url, type=transcoding2.type),
-			content
-		)
-		self.assertInHTML(
-			srctag.format(url=transcoding3.url, type=transcoding3.type),
-			content,
-			count=0
-		)
-		self.assertInHTML(
-			srctag.format(url=transcoding4.url, type=transcoding4.type),
-			content,
-			count=0
 		)
 
 		self.assertInHTML('<title>Vid 1</title>', content)
@@ -85,11 +75,6 @@ class VideoTestCase(TestCase):
 
 		self.assertInHTML(
 			'<a href="vid-1.html?quality=720p" onclick="vidTimeInUrl(this);">720p versie</a>',
-			content
-		)
-
-		self.assertIn(
-			'You need a browser that understands HTML5 video and supports h.264 or vp8 codecs.',
 			content
 		)
 
@@ -141,26 +126,15 @@ class VideoTestCase(TestCase):
 
 		content:str = resp.content.decode(resp.charset)
 
-		srctag = '<source src="{url}" type="{type}" />'
+		self.assertInHTML(
+			"""<video width="1280" height="720" controls="controls">
+				<source src="http://720p.mp4" type='video/mp4' />
+				<source src="http://720p.webm" type='video/webm' />
+				You need a browser that understands HTML5 video and supports h.264 or vp8 codecs.
+			</video>""",
+			content,
+		)
 
-		self.assertInHTML(
-			srctag.format(url=transcoding1.url, type=transcoding1.type),
-			content,
-			count=0
-		)
-		self.assertInHTML(
-			srctag.format(url=transcoding2.url, type=transcoding2.type),
-			content,
-			count=0
-		)
-		self.assertInHTML(
-			srctag.format(url=transcoding3.url, type=transcoding3.type),
-			content,
-		)
-		self.assertInHTML(
-			srctag.format(url=transcoding4.url, type=transcoding4.type),
-			content,
-		)
 
 		self.assertInHTML(
 			'<a href="vid-1.html?quality=480p" onclick="vidTimeInUrl(this);">480p versie</a>',
@@ -213,23 +187,19 @@ class VideoTestCase(TestCase):
 
 		content:str = resp.content.decode(resp.charset)
 
-		srctag = '<source src="{url}" type="{type}" />'
+		self.assertInHTML(
+			"""<video width="1280" height="720" controls="controls">
+				<source src="http://720p.mp4" type='video/mp4' />
+				<source src="http://720p.webm" type='video/webm' />
+				You need a browser that understands HTML5 video and supports h.264 or vp8 codecs.
+			</video>""",
+			content,
+		)
+
 
 		self.assertInHTML(
-			srctag.format(url=transcoding1.url, type=transcoding1.type),
-			content,
-			count=0
+			'<a href="vid-1.html?quality=480p" onclick="vidTimeInUrl(this);">480p versie</a>',
+			content
 		)
-		self.assertInHTML(
-			srctag.format(url=transcoding2.url, type=transcoding2.type),
-			content,
-			count=0
-		)
-		self.assertInHTML(
-			srctag.format(url=transcoding3.url, type=transcoding3.type),
-			content,
-		)
-		self.assertInHTML(
-			srctag.format(url=transcoding4.url, type=transcoding4.type),
-			content,
-		)
+
+		self.assertInHTML('<strong>720p versie</strong>', content)
