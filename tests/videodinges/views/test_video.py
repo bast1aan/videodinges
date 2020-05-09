@@ -3,12 +3,13 @@ from django.http import HttpResponse
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from tests.videodinges import factories
+from tests.videodinges import factories, UploadMixin
 from videodinges import models
 
 
-class VideoTestCase(TestCase):
+class VideoTestCase(UploadMixin, TestCase):
 	def setUp(self):
+		super().setUp()
 		self.client = Client()
 
 	def test_video_view_renders_properly(self):

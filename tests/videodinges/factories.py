@@ -1,10 +1,8 @@
 """ Module generating useful models in 1 place """
-import tempfile
 from typing import Type, TypeVar
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 import django.db.models
-from django.test import override_settings
 
 from videodinges import models
 
@@ -30,13 +28,9 @@ def create(model: Type[T], **kwargs) -> T:
 		return models.Transcoding.objects.create(**{**defaults, **kwargs})
 
 	if model is models.Upload:
-		return _upload(**kwargs)
-
-@override_settings(MEDIA_ROOT=tempfile.mkdtemp())
-def _upload(**kwargs):
-	file = SimpleUploadedFile('some_file.txt', b'some contents') \
-		if 'file' not in kwargs else None
-	return models.Upload.objects.create(**{**dict(file=file), **kwargs})
+		file = SimpleUploadedFile('some_file.txt', b'some contents') \
+			if 'file' not in kwargs else None
+		return models.Upload.objects.create(**{**dict(file=file), **kwargs})
 
 
 # TODO fix annoying dict notation to something more gentle.
