@@ -1,7 +1,7 @@
-from django.test import TestCase
+from django.test import SimpleTestCase
 from videodinges.models import TranscodingType, get_short_name_of_transcoding_type
 
-class GetShortNameOfTranscodingTypeTestCase(TestCase):
+class GetShortNameOfTranscodingTypeTestCase(SimpleTestCase):
 
 	def test_gets_transcoding_by_name(self):
 		result = get_short_name_of_transcoding_type('video/webm; codecs="vp8, vorbis"')

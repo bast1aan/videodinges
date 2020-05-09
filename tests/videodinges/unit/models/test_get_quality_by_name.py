@@ -1,7 +1,7 @@
-from django.test import TestCase
+from django.test import SimpleTestCase
 from videodinges.models import get_quality_by_name
 
-class GetQualityByNameTestCase(TestCase):
+class GetQualityByNameTestCase(SimpleTestCase):
 
 	def test_returns_quality_if_listed(self):
 		result = get_quality_by_name('480p')
