@@ -1,13 +1,13 @@
 from django.test import TestCase
+
+from tests.videodinges import UploadMixin
 from videodinges.models import Upload
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import override_settings
 
-import tempfile
 
-@override_settings(MEDIA_ROOT=tempfile.mkdtemp())
-class UploadTestCase(TestCase):
+class UploadTestCase(UploadMixin, TestCase):
 	def setUp(self):
+		super().setUp()
 		Upload.objects.create(file=SimpleUploadedFile('some_file.txt', b'some contents'))
 
 	def test_model_is_created(self):

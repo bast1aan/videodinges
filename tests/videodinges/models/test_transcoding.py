@@ -2,7 +2,7 @@ from django.db.utils import IntegrityError
 
 from django.test import TestCase
 
-from tests.videodinges import factories
+from tests.videodinges import factories, UploadMixin
 from videodinges.models import Transcoding, Video, qualities, transcoding_types, Upload
 
 
@@ -19,7 +19,7 @@ class TranscodingTestCase(TestCase):
 		self.assertEqual(transcoding.url, 'https://some_url')
 
 
-class CreateTranscodingTestCase(TestCase):
+class CreateTranscodingTestCase(UploadMixin, TestCase):
 
 	def test_upload_and_url_cannot_both_be_filled(self):
 		video = factories.create(Video)
