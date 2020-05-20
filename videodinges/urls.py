@@ -19,7 +19,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import include
 
-from . import testviews, views
+from . import views
 
 _urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -28,9 +28,6 @@ _urlpatterns = [
 ]
 
 _urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-for i in testviews.__all__:
-	_urlpatterns.append(url(r'^test/{}$'.format(i), testviews.__dict__[i]))
 
 if settings.URL_BASE:
 	urlpatterns = [url(r'^{}/'.format(settings.URL_BASE), include(_urlpatterns))]
