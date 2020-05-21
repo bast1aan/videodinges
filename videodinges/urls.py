@@ -23,8 +23,8 @@ from . import views
 
 _urlpatterns = [
 	url(r'^admin/', admin.site.urls),
-	url(r'^$', views.index),
-	url(r'^(?P<slug>[\w-]+).html', views.video)
+	url(r'^$', views.index, name='index'),
+	url(r'^(?P<slug>[\w-]+).html', views.video, name='video')
 ]
 
 _urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
