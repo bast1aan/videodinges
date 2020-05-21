@@ -24,3 +24,14 @@ class TranscodingTestCase(TestCase):
 		self.assertEqual(transcoding.quality, '720p')
 		self.assertEqual(transcoding.type, 'video/mp4')
 		self.assertEqual(transcoding.url, 'http://another_url')
+
+	def test_does_not_create_video_when_providing_one(self):
+		transcoding = factories.create(
+			Transcoding,
+			quality='720p',
+			type='video/mp4',
+			url='http://another_url',
+			video=factories.create(Video, slug='yet-another-video-slug')
+		)
+
+		self.assertEquals(Video.objects.all().count(), 1)

@@ -14,10 +14,8 @@ def create(model: Type[T], **kwargs) -> T:
 		return _create_with_defaults(models.Video, kwargs, title='Title', slug='slug', description='Description')
 
 	if model is models.Transcoding:
-		video = create(models.Video, title='Title', slug='slug', description='Description') \
-			if 'video' not in kwargs else None
 		defaults = dict(
-			video=video,
+			video=lambda: create(models.Video),
 			quality=models.qualities[0].name,
 			type=str(models.transcoding_types[0]),
 		)
@@ -36,8 +34,16 @@ def create(model: Type[T], **kwargs) -> T:
 def _create_with_defaults(model: Type[T], kwargs: dict, **defaults) -> T:
 	"""
 		Return created django model instance.
+		When providing lambda as default item, the result of the lambda will be taken.
+		The lambda will ONLY be executed when not provided in kwargs.
+
 		:param model: django model to create
 		:param kwargs: keyword arguments to fill the model
 		:param defaults: default keyword arguments to use when not mentioned in kwargs
 	"""
+
+	for k, v in defaults.items():
+		if callable(v) and not k in kwargs:
+			defaults[k] = v()
+
 	return model.objects.create(**{**defaults, **kwargs})
