@@ -14,16 +14,17 @@ def create(model: Type[T], **kwargs) -> T:
 		return _create_with_defaults(models.Video, kwargs, title='Title', slug='slug', description='Description')
 
 	if model is models.Transcoding:
-		defaults = dict(
+		def url():
+			# only URL if no upload for they are mutually exclusive
+			if 'upload' not in kwargs:
+				return 'https://some_url'
+
+		return _create_with_defaults(models.Transcoding, kwargs,
 			video=lambda: create(models.Video),
 			quality=models.qualities[0].name,
 			type=str(models.transcoding_types[0]),
+			url=url,
 		)
-		if 'upload' not in kwargs:
-			# only URL if no upload for they are multually exclusive
-			defaults['url'] = 'https://some_url'
-
-		return _create_with_defaults(models.Transcoding, kwargs, **defaults)
 
 	if model is models.Upload:
 		return _create_with_defaults(models.Upload, kwargs, file=SimpleUploadedFile('some_file.txt', b'some contents'))

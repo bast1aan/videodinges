@@ -1,7 +1,9 @@
+import os
+
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
-from videodinges.models import Transcoding, Video
-from tests.videodinges import factories
-from datetime import datetime
+from videodinges.models import Transcoding, Video, Upload
+from tests.videodinges import factories, UploadMixin
 
 class TranscodingTestCase(TestCase):
 	def test_factory_returns_model(self):
@@ -35,3 +37,19 @@ class TranscodingTestCase(TestCase):
 		)
 
 		self.assertEquals(Video.objects.all().count(), 1)
+
+
+class TranscodingWithUploadTestCase(UploadMixin, TestCase):
+	def test_can_assign_upload(self):
+		transcoding = factories.create(
+			Transcoding,
+			quality='720p',
+			type='video/mp4',
+			video=factories.create(Video, slug='yet-another-video-slug'),
+			upload=factories.create(Upload, file=SimpleUploadedFile('my_upload.txt', b'some_contents'))
+		)
+
+		self.assertTrue(os.path.exists(os.path.join(self.media_root.name, 'my_upload.txt')))
+		with open(os.path.join(self.media_root.name, 'my_upload.txt'), 'rb') as f:
+			self.assertEquals(f.read(), b'some_contents')
+
