@@ -70,7 +70,7 @@ class VideoTestCase(UploadMixin, TestCase):
 
 		self.assertInHTML('<h1>Vid 1</h1>', content)
 
-		self.assertInHTML('<p>Description</p>', content)
+		self.assertInHTML('<p>Description 1</p>', content)
 
 		self.assertInHTML('<strong>480p versie</strong>', content)
 

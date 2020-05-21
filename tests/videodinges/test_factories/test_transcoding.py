@@ -8,7 +8,7 @@ from tests.videodinges import factories, UploadMixin
 class TranscodingTestCase(TestCase):
 	def test_factory_returns_model(self):
 		transcoding = factories.create(Transcoding)
-		self.assertEqual(transcoding.video.slug, 'slug')
+		self.assertEqual(transcoding.video.slug, 'slug-1')
 		self.assertEqual(transcoding.quality, '360p')
 		self.assertEqual(transcoding.type, 'video/webm')
 		self.assertEqual(transcoding.url, 'https://some_url')
