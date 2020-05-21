@@ -28,6 +28,8 @@ def create(model: Type[T], **kwargs) -> T:
 	if model is models.Upload:
 		return _create_with_defaults(models.Upload, kwargs, file=SimpleUploadedFile('some_file.txt', b'some contents'))
 
+	raise NotImplementedError('Factory for %s not implemented' % model)
+
 
 def _create_with_defaults(model: Type[T], kwargs: dict, **defaults) -> T:
 	"""
