@@ -26,9 +26,7 @@ def create(model: Type[T], **kwargs) -> T:
 		return _create_with_defaults(models.Transcoding, kwargs, **defaults)
 
 	if model is models.Upload:
-		file = SimpleUploadedFile('some_file.txt', b'some contents') \
-			if 'file' not in kwargs else None
-		return _create_with_defaults(models.Upload, kwargs, file=file)
+		return _create_with_defaults(models.Upload, kwargs, file=SimpleUploadedFile('some_file.txt', b'some contents'))
 
 
 def _create_with_defaults(model: Type[T], kwargs: dict, **defaults) -> T:
