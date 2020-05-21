@@ -34,3 +34,8 @@ class VideoTestCase(TestCase):
 		self.assertEqual(video3.description, 'Description 3')
 		self.assertIsInstance(video3.created_at, datetime)
 		self.assertIsInstance(video3.updated_at, datetime)
+
+	def test_factory_runs_only_2_queries(self):
+		""" Factory should only use 2 queries: one for selecting primary key, and one for inserting record """
+		with self.assertNumQueries(2):
+			video = factories.create(Video)

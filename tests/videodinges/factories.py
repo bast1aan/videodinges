@@ -51,10 +51,18 @@ def _create_with_defaults(model: Type[T], kwargs: dict, **defaults) -> T:
 		:param defaults: default keyword arguments to use when not mentioned in kwargs
 	"""
 
+	_next_pk = 0
+	def next_pk():
+		# Queries next pk only one time during creation
+		nonlocal _next_pk
+		if _next_pk == 0:
+			_next_pk = _query_next_pk(model)
+		return _next_pk
+
 	for k, v in defaults.items():
 		if callable(v) and not k in kwargs:
 			if len(signature(v).parameters) == 1:
-				result = v(_next_pk(model))
+				result = v(next_pk())
 			else:
 				result = v()
 			defaults[k] = result
@@ -62,7 +70,7 @@ def _create_with_defaults(model: Type[T], kwargs: dict, **defaults) -> T:
 	return model.objects.create(**{**defaults, **kwargs})
 
 
-def _next_pk(model: Type[T]) -> int:
+def _query_next_pk(model: Type[T]) -> int:
 	try:
 		return model.objects.order_by('-pk').first().pk + 1
 	except AttributeError:
