@@ -10,7 +10,7 @@
 <h1>{{ title }}</h1>
 <video width="{{ width }}" height="{{ height }}" {% if poster %}poster="{{ poster }}" {% endif %}controls="controls">
 {% for source in sources %}
-	<source src="{{ source.src }}" type='{{ source.type }}' />
+	<source src="{{ source.src }}" type='{{ source.type|safe }}' />
 {% endfor %}
 	You need a browser that understands HTML5 video and supports {% for i in used_codecs %}{{ i }}{% if not loop.last %} or {% endif %}{% endfor %} codecs.
 </video><br />

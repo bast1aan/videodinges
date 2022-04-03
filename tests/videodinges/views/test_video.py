@@ -24,7 +24,7 @@ class VideoTestCase(UploadMixin, TestCase):
 			models.Transcoding,
 			video=video,
 			quality='480p',
-			type='video/webm',
+			type='video/webm; codecs="vp9, opus"',
 			url='http://480p.webm',
 		)
 		transcoding2 = factories.create(
@@ -38,7 +38,7 @@ class VideoTestCase(UploadMixin, TestCase):
 			models.Transcoding,
 			video=video,
 			quality='720p',
-			type='video/webm',
+			type='video/webm; codecs="vp9, opus"',
 			url='http://720p.webm',
 		)
 		transcoding4 = factories.create(
@@ -60,8 +60,8 @@ class VideoTestCase(UploadMixin, TestCase):
 		self.assertInHTML(
 			"""<video width="853" height="480" controls="controls">
 				<source src="http://480p.mp4" type='video/mp4' />
-				<source src="http://480p.webm" type='video/webm' />
-				You need a browser that understands HTML5 video and supports h.264 or vp8 codecs.
+				<source src="http://480p.webm" type='video/webm; codecs="vp9, opus"' />
+				You need a browser that understands HTML5 video and supports h.264 or vp9 codecs.
 			</video>""",
 			content,
 		)
@@ -96,7 +96,7 @@ class VideoTestCase(UploadMixin, TestCase):
 			models.Transcoding,
 			video=video,
 			quality='480p',
-			type='video/webm',
+			type='video/webm; codecs="vp8, vorbis"',
 			url='http://480p.webm',
 		)
 		transcoding2 = factories.create(
@@ -110,7 +110,7 @@ class VideoTestCase(UploadMixin, TestCase):
 			models.Transcoding,
 			video=video,
 			quality='720p',
-			type='video/webm',
+			type='video/webm; codecs="vp8, vorbis"',
 			url='http://720p.webm',
 		)
 		transcoding4 = factories.create(
@@ -130,7 +130,7 @@ class VideoTestCase(UploadMixin, TestCase):
 		self.assertInHTML(
 			"""<video width="1280" height="720" controls="controls">
 				<source src="http://720p.mp4" type='video/mp4' />
-				<source src="http://720p.webm" type='video/webm' />
+				<source src="http://720p.webm" type='video/webm; codecs="vp8, vorbis"' />
 				You need a browser that understands HTML5 video and supports h.264 or vp8 codecs.
 			</video>""",
 			content,
@@ -156,7 +156,7 @@ class VideoTestCase(UploadMixin, TestCase):
 			models.Transcoding,
 			video=video,
 			quality='480p',
-			type='video/webm',
+			type='video/webm; codecs="vp8, vorbis"',
 			url='http://480p.webm',
 		)
 		transcoding2 = factories.create(
@@ -170,7 +170,7 @@ class VideoTestCase(UploadMixin, TestCase):
 			models.Transcoding,
 			video=video,
 			quality='720p',
-			type='video/webm',
+			type='video/webm; codecs="vp8, vorbis"',
 			url='http://720p.webm',
 		)
 		transcoding4 = factories.create(
@@ -191,7 +191,7 @@ class VideoTestCase(UploadMixin, TestCase):
 		self.assertInHTML(
 			"""<video width="1280" height="720" controls="controls">
 				<source src="http://720p.mp4" type='video/mp4' />
-				<source src="http://720p.webm" type='video/webm' />
+				<source src="http://720p.webm" type='video/webm; codecs="vp8, vorbis"' />
 				You need a browser that understands HTML5 video and supports h.264 or vp8 codecs.
 			</video>""",
 			content,
@@ -221,7 +221,7 @@ class VideoTestCase(UploadMixin, TestCase):
 			models.Transcoding,
 			video=video,
 			quality='480p',
-			type='video/webm',
+			type='video/webm; codecs="vp8, vorbis"',
 			upload=movie,
 		)
 
@@ -234,7 +234,7 @@ class VideoTestCase(UploadMixin, TestCase):
 
 		self.assertInHTML(
 			"""<video width="853" height="480" poster="{image}" controls="controls">
-				<source src="{url}" type='video/webm' />
+				<source src="{url}" type='video/webm; codecs="vp8, vorbis"' />
 				You need a browser that understands HTML5 video and supports vp8 codecs.
 			</video>""".format(url=movie.file.url, image=image.file.url),
 			content,
