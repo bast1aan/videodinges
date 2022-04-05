@@ -8,6 +8,7 @@ from videodinges.models import Transcoding, Video, qualities, transcoding_types,
 
 class TranscodingTestCase(TestCase):
 	def setUp(self):
+		super().setUp()
 		video = Video.objects.create(title='Title', slug='slug', description='Description')
 		Transcoding.objects.create(video=video, quality=qualities[0].name, type=str(transcoding_types[0]), url='https://some_url')
 

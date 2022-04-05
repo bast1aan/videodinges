@@ -108,6 +108,33 @@ class Transcoding(models.Model):
 		]
 		db_table = 'transcodings'
 
+class Track(models.Model):
+	KINDS = (
+		'subtitles',
+		'captions',
+		'descriptions',
+		'chapters',
+		'metadata',
+	)
+	id = models.AutoField(primary_key=True)
+	video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='tracks')
+	default = models.BooleanField(default=False)
+	kind = models.CharField(choices=((kind, kind) for kind in KINDS), max_length=128, default=KINDS[0])
+	lang = models.CharField(max_length=128)
+	label = models.CharField(max_length=128, blank=True, null=True)
+	upload = models.OneToOneField(Upload, on_delete=models.PROTECT)
+
+	def __str__(self):
+		return '%s_%s' % (self.kind, self.lang)
+
+	class Meta:
+		unique_together = ('video', 'kind', 'lang')
+		constraints = (
+			constraints.UniqueConstraint(
+				fields=('video',), condition=Q(default=True), name='only_one_default_per_video'),
+		)
+		db_table = 'tracks'
+
 def get_quality_by_name(name: str) -> Optional[Quality]:
 	for quality in qualities:
 		if quality.name == name:
