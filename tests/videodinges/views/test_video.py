@@ -246,3 +246,191 @@ class VideoTestCase(UploadMixin, TestCase):
 		)
 
 
+class VideoWithTrackTestCase(UploadMixin, TestCase):
+	def setUp(self):
+		super().setUp()
+		self.client = Client()
+		self.video = factories.create(
+			models.Video,
+			title='Vid 1',
+			slug='vid-1',
+			default_quality='480p',
+		)
+		factories.create(
+			models.Transcoding,
+			video=self.video,
+			quality='480p',
+			type='video/webm; codecs="vp9, opus"',
+			url='http://480p.webm',
+		)
+		factories.create(
+			models.Transcoding,
+			video=self.video,
+			quality='480p',
+			type='video/mp4',
+			url='http://480p.mp4',
+		)
+
+	def test_video_view_renders_track_properly(self):
+
+		factories.create(
+			models.Track,
+			video=self.video,
+			lang='en',
+		)
+
+		resp:HttpResponse = self.client.get(reverse('video', args=['vid-1']))
+
+		self.assertEqual(resp.status_code, 200)
+
+		content:str = resp.content.decode(resp.charset)
+
+		self.assertInHTML(
+			"""<video width="853" height="480" controls="controls">
+				<source src="http://480p.mp4" type='video/mp4' />
+				<source src="http://480p.webm" type='video/webm; codecs="vp9, opus"' />
+				<track src="/uploads/some_file.txt" srclang="en" kind="subtitles" label="en" />
+				You need a browser that understands HTML5 video and supports h.264 or vp9 codecs.
+			</video>""",
+			content,
+		)
+
+	def test_video_view_renders_multiple_tracks_properly(self):
+
+		track_en = factories.create(
+			models.Track,
+			video=self.video,
+			lang='en',
+		)
+
+		track_nl = factories.create(
+			models.Track,
+			video=self.video,
+			lang='nl',
+		)
+
+		resp:HttpResponse = self.client.get(reverse('video', args=['vid-1']))
+
+		self.assertEqual(resp.status_code, 200)
+
+		content:str = resp.content.decode(resp.charset)
+
+		self.assertInHTML(
+			f"""<video width="853" height="480" controls="controls">
+				<source src="http://480p.mp4" type='video/mp4' />
+				<source src="http://480p.webm" type='video/webm; codecs="vp9, opus"' />
+				<track src="{ track_en.upload.file.url }" srclang="en" kind="subtitles" label="en" />
+				<track src="{ track_nl.upload.file.url }" srclang="nl" kind="subtitles" label="nl" />
+				You need a browser that understands HTML5 video and supports h.264 or vp9 codecs.
+			</video>""",
+			content,
+		)
+
+
+	def test_video_view_renders_default_track_properly(self):
+
+		factories.create(
+			models.Track,
+			video=self.video,
+			lang='en',
+			default=True
+		)
+
+		resp:HttpResponse = self.client.get(reverse('video', args=['vid-1']))
+
+		self.assertEqual(resp.status_code, 200)
+
+		content:str = resp.content.decode(resp.charset)
+
+		self.assertInHTML(
+			"""<video width="853" height="480" controls="controls">
+				<source src="http://480p.mp4" type='video/mp4' />
+				<source src="http://480p.webm" type='video/webm; codecs="vp9, opus"' />
+				<track src="/uploads/some_file.txt" default="default" srclang="en" kind="subtitles" label="en" />
+				You need a browser that understands HTML5 video and supports h.264 or vp9 codecs.
+			</video>""",
+			content,
+		)
+
+	def test_video_view_renders_multiple_tracks_properly_with_one_default(self):
+
+		track_en = factories.create(
+			models.Track,
+			video=self.video,
+			lang='en',
+			default=True
+		)
+
+		track_nl = factories.create(
+			models.Track,
+			video=self.video,
+			lang='nl',
+		)
+
+		resp:HttpResponse = self.client.get(reverse('video', args=['vid-1']))
+
+		self.assertEqual(resp.status_code, 200)
+
+		content:str = resp.content.decode(resp.charset)
+
+		self.assertInHTML(
+			f"""<video width="853" height="480" controls="controls">
+				<source src="http://480p.mp4" type='video/mp4' />
+				<source src="http://480p.webm" type='video/webm; codecs="vp9, opus"' />
+				<track src="{ track_en.upload.file.url }" default="default" srclang="en" kind="subtitles" label="en" />
+				<track src="{ track_nl.upload.file.url }" srclang="nl" kind="subtitles" label="nl" />
+				You need a browser that understands HTML5 video and supports h.264 or vp9 codecs.
+			</video>""",
+			content,
+		)
+
+	def test_video_view_renders_track_label(self):
+
+		factories.create(
+			models.Track,
+			video=self.video,
+			lang='en',
+			label='Some Label',
+		)
+
+		resp:HttpResponse = self.client.get(reverse('video', args=['vid-1']))
+
+		self.assertEqual(resp.status_code, 200)
+
+		content:str = resp.content.decode(resp.charset)
+
+		self.assertInHTML(
+			"""<video width="853" height="480" controls="controls">
+				<source src="http://480p.mp4" type='video/mp4' />
+				<source src="http://480p.webm" type='video/webm; codecs="vp9, opus"' />
+				<track src="/uploads/some_file.txt" srclang="en" kind="subtitles" label="Some Label" />
+				You need a browser that understands HTML5 video and supports h.264 or vp9 codecs.
+			</video>""",
+			content,
+		)
+
+
+	def test_video_view_renders_track_kind(self):
+
+		factories.create(
+			models.Track,
+			video=self.video,
+			lang='en',
+			kind='captions',
+		)
+
+		resp:HttpResponse = self.client.get(reverse('video', args=['vid-1']))
+
+		self.assertEqual(resp.status_code, 200)
+
+		content:str = resp.content.decode(resp.charset)
+
+		self.assertInHTML(
+			"""<video width="853" height="480" controls="controls">
+				<source src="http://480p.mp4" type='video/mp4' />
+				<source src="http://480p.webm" type='video/webm; codecs="vp9, opus"' />
+				<track src="/uploads/some_file.txt" srclang="en" kind="captions" label="en" />
+				You need a browser that understands HTML5 video and supports h.264 or vp9 codecs.
+			</video>""",
+			content,
+		)
