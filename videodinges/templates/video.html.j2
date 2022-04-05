@@ -13,7 +13,7 @@
 	<source src="{{ source.src }}" type='{{ source.type|safe }}' />
 {% endfor %}
 {% for track in tracks %}
-	<track{% if track.default %} default="default"{% endif %} src="{{ track.upload.file.url }}" srclang="{{ track.lang }}" kind="{{ track.kind }}" label="{{ track.label or track.lang }}" />
+	<track{% if track.default %} default="default"{% endif %} src="{{ track.src }}" srclang="{{ track.srclang }}" kind="{{ track.kind }}" label="{{ track.label }}" />
 {% endfor %}
 	You need a browser that understands HTML5 video and supports {% for i in used_codecs %}{{ i }}{% if not loop.last %} or {% endif %}{% endfor %} codecs.
 </video><br />

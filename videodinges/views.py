@@ -51,7 +51,15 @@ def video(request: HttpRequest, slug: str) -> HttpResponse:
 
 	template_data['qualities'] = qualities.keys()
 
-	template_data['tracks'] = video.tracks.all()
+	template_data['tracks'] = [
+		{
+			'default': track.default,
+			'src': track.upload.file.url,
+			'srclang': track.lang,
+			'kind': track.kind,
+			'label': track.label or track.lang,
+		} for track in video.tracks.all()
+	]
 
 	return render(request, 'video.html.j2', template_data, using='jinja2')
 
