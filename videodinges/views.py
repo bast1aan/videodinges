@@ -37,12 +37,19 @@ def video(request: HttpRequest, slug: str) -> HttpResponse:
 		current_quality=quality[0].quality_obj.name
 	)
 
-	template_data['sources'] = [
+	sources = [
 		{
 			'src': _url_for(transcoding),
 			'type': transcoding.type,
 		}
-			for transcoding in quality ]
+			for transcoding in quality
+	]
+	# sort by transcoding type priority
+	sources.sort(
+		key=lambda i: models.get_transcoding_type_by_name(i['type']).priority,
+		reverse=True
+	)
+	template_data['sources'] = sources
 
 	template_data['used_codecs'] = [
 		models.get_short_name_of_transcoding_type(transcoding.type)
