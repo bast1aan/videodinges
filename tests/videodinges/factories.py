@@ -34,6 +34,13 @@ def create(model: Type[T], **kwargs) -> T:
 	if model is models.Upload:
 		return _create_with_defaults(models.Upload, kwargs, file=SimpleUploadedFile('some_file.txt', b'some contents'))
 
+	if model is models.Track:
+		return _create_with_defaults(models.Track, kwargs,
+			video=lambda: create(models.Video),
+			lang='en',
+			upload=lambda: create(models.Upload)
+		)
+
 	raise NotImplementedError('Factory for %s not implemented' % model)
 
 
