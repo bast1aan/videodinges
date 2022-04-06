@@ -59,8 +59,8 @@ class VideoTestCase(UploadMixin, TestCase):
 
 		self.assertInHTML(
 			"""<video width="853" height="480" controls="controls">
-				<source src="http://480p.mp4" type='video/mp4' />
 				<source src="http://480p.webm" type='video/webm; codecs="vp9, opus"' />
+				<source src="http://480p.mp4" type='video/mp4' />
 				You need a browser that understands HTML5 video and supports h.264 or vp9 codecs.
 			</video>""",
 			content,
@@ -129,8 +129,8 @@ class VideoTestCase(UploadMixin, TestCase):
 
 		self.assertInHTML(
 			"""<video width="1280" height="720" controls="controls">
-				<source src="http://720p.mp4" type='video/mp4' />
 				<source src="http://720p.webm" type='video/webm; codecs="vp8, vorbis"' />
+				<source src="http://720p.mp4" type='video/mp4' />
 				You need a browser that understands HTML5 video and supports h.264 or vp8 codecs.
 			</video>""",
 			content,
@@ -190,8 +190,8 @@ class VideoTestCase(UploadMixin, TestCase):
 
 		self.assertInHTML(
 			"""<video width="1280" height="720" controls="controls">
-				<source src="http://720p.mp4" type='video/mp4' />
 				<source src="http://720p.webm" type='video/webm; codecs="vp8, vorbis"' />
+				<source src="http://720p.mp4" type='video/mp4' />
 				You need a browser that understands HTML5 video and supports h.264 or vp8 codecs.
 			</video>""",
 			content,
@@ -287,8 +287,8 @@ class VideoWithTrackTestCase(UploadMixin, TestCase):
 
 		self.assertInHTML(
 			"""<video width="853" height="480" controls="controls">
-				<source src="http://480p.mp4" type='video/mp4' />
 				<source src="http://480p.webm" type='video/webm; codecs="vp9, opus"' />
+				<source src="http://480p.mp4" type='video/mp4' />
 				<track src="/uploads/some_file.txt" srclang="en" kind="subtitles" label="en" />
 				You need a browser that understands HTML5 video and supports h.264 or vp9 codecs.
 			</video>""",
@@ -317,8 +317,8 @@ class VideoWithTrackTestCase(UploadMixin, TestCase):
 
 		self.assertInHTML(
 			f"""<video width="853" height="480" controls="controls">
-				<source src="http://480p.mp4" type='video/mp4' />
 				<source src="http://480p.webm" type='video/webm; codecs="vp9, opus"' />
+				<source src="http://480p.mp4" type='video/mp4' />
 				<track src="{ track_en.upload.file.url }" srclang="en" kind="subtitles" label="en" />
 				<track src="{ track_nl.upload.file.url }" srclang="nl" kind="subtitles" label="nl" />
 				You need a browser that understands HTML5 video and supports h.264 or vp9 codecs.
@@ -344,8 +344,8 @@ class VideoWithTrackTestCase(UploadMixin, TestCase):
 
 		self.assertInHTML(
 			"""<video width="853" height="480" controls="controls">
-				<source src="http://480p.mp4" type='video/mp4' />
 				<source src="http://480p.webm" type='video/webm; codecs="vp9, opus"' />
+				<source src="http://480p.mp4" type='video/mp4' />
 				<track src="/uploads/some_file.txt" default="default" srclang="en" kind="subtitles" label="en" />
 				You need a browser that understands HTML5 video and supports h.264 or vp9 codecs.
 			</video>""",
@@ -375,8 +375,8 @@ class VideoWithTrackTestCase(UploadMixin, TestCase):
 
 		self.assertInHTML(
 			f"""<video width="853" height="480" controls="controls">
-				<source src="http://480p.mp4" type='video/mp4' />
 				<source src="http://480p.webm" type='video/webm; codecs="vp9, opus"' />
+				<source src="http://480p.mp4" type='video/mp4' />
 				<track src="{ track_en.upload.file.url }" default="default" srclang="en" kind="subtitles" label="en" />
 				<track src="{ track_nl.upload.file.url }" srclang="nl" kind="subtitles" label="nl" />
 				You need a browser that understands HTML5 video and supports h.264 or vp9 codecs.
@@ -401,8 +401,8 @@ class VideoWithTrackTestCase(UploadMixin, TestCase):
 
 		self.assertInHTML(
 			"""<video width="853" height="480" controls="controls">
-				<source src="http://480p.mp4" type='video/mp4' />
 				<source src="http://480p.webm" type='video/webm; codecs="vp9, opus"' />
+				<source src="http://480p.mp4" type='video/mp4' />
 				<track src="/uploads/some_file.txt" srclang="en" kind="subtitles" label="Some Label" />
 				You need a browser that understands HTML5 video and supports h.264 or vp9 codecs.
 			</video>""",
@@ -427,8 +427,8 @@ class VideoWithTrackTestCase(UploadMixin, TestCase):
 
 		self.assertInHTML(
 			"""<video width="853" height="480" controls="controls">
-				<source src="http://480p.mp4" type='video/mp4' />
 				<source src="http://480p.webm" type='video/webm; codecs="vp9, opus"' />
+				<source src="http://480p.mp4" type='video/mp4' />
 				<track src="/uploads/some_file.txt" srclang="en" kind="captions" label="en" />
 				You need a browser that understands HTML5 video and supports h.264 or vp9 codecs.
 			</video>""",
