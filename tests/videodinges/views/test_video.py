@@ -245,6 +245,52 @@ class VideoTestCase(UploadMixin, TestCase):
 			content,
 		)
 
+	def test_video_view_renders_transcoding_types_in_correct_order(self):
+
+		video = factories.create(
+			models.Video,
+			title='Vid 1',
+			slug='vid-1',
+			default_quality='480p',
+		)
+		factories.create(
+			models.Transcoding,
+			video=video,
+			quality='480p',
+			type='video/mp4; codecs="avc1.64001e,mp4a.40.2"',
+			url='http://480p.mp4',
+		)
+		factories.create(
+			models.Transcoding,
+			video=video,
+			quality='480p',
+			type='video/webm; codecs="vp9, opus"',
+			url='http://480p.vp9.webm',
+		)
+		factories.create(
+			models.Transcoding,
+			video=video,
+			quality='480p',
+			type='video/webm; codecs="vp8, vorbis"',
+			url='http://480p.vp8.webm',
+		)
+
+		resp:HttpResponse = self.client.get(reverse('video', args=['vid-1']))
+
+		self.assertEqual(resp.status_code, 200)
+
+		content:str = resp.content.decode(resp.charset)
+
+		self.assertInHTML(
+			"""<video width="853" height="480" controls="controls">
+				<source src="http://480p.vp9.webm" type='video/webm; codecs="vp9, opus"' />
+				<source src="http://480p.vp8.webm" type='video/webm; codecs="vp8, vorbis"' />
+				<source src="http://480p.mp4" type='video/mp4; codecs="avc1.64001e,mp4a.40.2"' />
+				You need a browser that understands HTML5 video and supports h.264 or vp8 or vp9 codecs.
+			</video>""",
+			content,
+		)
+
 
 class VideoWithTrackTestCase(UploadMixin, TestCase):
 	def setUp(self):
