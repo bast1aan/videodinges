@@ -143,6 +143,11 @@ def get_quality_by_name(name: str) -> Optional[Quality]:
 		if quality.name == name:
 			return quality
 
+def get_transcoding_type_by_name(name: str) -> Optional[TranscodingType]:
+	for t in transcoding_types:
+		if t.name == name:
+			return t
+
 def get_short_name_of_transcoding_type(transcoding_type: Union[str, TranscodingType]) -> str:
 	if isinstance(transcoding_type, str):
 		for type_ in transcoding_types:
