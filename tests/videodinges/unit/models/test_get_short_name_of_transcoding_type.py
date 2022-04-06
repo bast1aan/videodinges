@@ -9,5 +9,5 @@ class GetShortNameOfTranscodingTypeTestCase(SimpleTestCase):
 
 	def test_gets_transcoding_by_transcoding_object(self):
 		result = get_short_name_of_transcoding_type(TranscodingType(name='Looooong naaaaame', short_name='shrt nm',
-			description='Some Description'))
+			description='Some Description', priority=1))
 		self.assertEqual(result, 'shrt nm')

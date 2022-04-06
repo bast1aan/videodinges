@@ -16,6 +16,7 @@ class TranscodingType(NamedTuple):
 	name: str
 	short_name: str
 	description: str
+	priority: int
 
 	def __str__(self):
 		return self.name
@@ -28,18 +29,20 @@ qualities = (
 )
 
 transcoding_types = (
-	TranscodingType(name='video/webm', short_name='webm', description='Generic WebM'),
-	TranscodingType(name='video/webm; codecs="vp8, vorbis"', short_name='vp8', description='WebM with VP8 and Vorbis'),
-	TranscodingType(name='video/webm; codecs="vp9, opus"', short_name='vp9', description='WebM with VP9 and Opus'),
-	TranscodingType(name='video/mp4', short_name='h.264', description='Generic MP4 with H.264'),
+	TranscodingType(name='video/webm', short_name='webm', description='Generic WebM', priority=1),
+	TranscodingType(name='video/webm; codecs="vp8, vorbis"', short_name='vp8', description='WebM with VP8 and Vorbis',
+		priority=80),
+	TranscodingType(name='video/webm; codecs="vp9, opus"', short_name='vp9', description='WebM with VP9 and Opus',
+		priority=100),
+	TranscodingType(name='video/mp4', short_name='h.264', description='Generic MP4 with H.264', priority=1),
 	TranscodingType(name='video/mp4; codecs="avc1.64001e,mp4a.40.2"', short_name='h.264',
-		description='MP4 with H.264 (AVC1 profile High, Level 3.0) and AAC-LC'),
+		description='MP4 with H.264 (AVC1 profile High, Level 3.0) and AAC-LC', priority=50),
 	TranscodingType(name='video/mp4; codecs="avc1.64001f,mp4a.40.2"', short_name='h.264',
-		description='MP4 with H.264 (AVC1 profile High, Level 3.1) and AAC-LC'),
+		description='MP4 with H.264 (AVC1 profile High, Level 3.1) and AAC-LC', priority=50),
 	TranscodingType(name='video/mp4; codecs="avc1.640028,mp4a.40.2"', short_name='h.264',
-		description='MP4 with H.264 (AVC1 profile High, Level 4.0) and AAC-LC'),
+		description='MP4 with H.264 (AVC1 profile High, Level 4.0) and AAC-LC', priority=50),
 	TranscodingType(name='video/mp4; codecs="avc1.640032,mp4a.40.2"', short_name='h.264',
-		description='MP4 with H.264 (AVC1 profile High, Level 5.0) and AAC-LC'),
+		description='MP4 with H.264 (AVC1 profile High, Level 5.0) and AAC-LC', priority=50),
 )
 
 class Upload(models.Model):
