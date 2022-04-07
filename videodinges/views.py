@@ -44,9 +44,19 @@ def video(request: HttpRequest, slug: str) -> HttpResponse:
 		}
 			for transcoding in quality
 	]
-	# sort by transcoding type priority
+
+	max_prio = max(tt.priority for tt in models.transcoding_types) + 1
+	video_codecs_prio_cookie = request.COOKIES.get('video_codecs_prio', '')
+	client_codecs_prio = video_codecs_prio_cookie.split(' ')
+	client_codecs_prio.reverse()
+	client_codecs_prio_dct = {
+		v: max_prio + i
+		for i, v in enumerate(client_codecs_prio)
+	}
+
+	# sort by client desired order, or transcoding type priority
 	sources.sort(
-		key=lambda i: models.get_transcoding_type_by_name(i['type']).priority,
+		key=lambda i: client_codecs_prio_dct.get(models.get_transcoding_type_by_name(i['type']).short_name) or models.get_transcoding_type_by_name(i['type']).priority,
 		reverse=True
 	)
 	template_data['sources'] = sources
