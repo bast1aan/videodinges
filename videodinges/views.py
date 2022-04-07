@@ -45,18 +45,11 @@ def video(request: HttpRequest, slug: str) -> HttpResponse:
 			for transcoding in quality
 	]
 
-	max_prio = max(tt.priority for tt in models.transcoding_types) + 1
-	video_codecs_prio_cookie = request.COOKIES.get('video_codecs_prio', '')
-	client_codecs_prio = video_codecs_prio_cookie.split(' ')
-	client_codecs_prio.reverse()
-	client_codecs_prio_dct = {
-		v: max_prio + i
-		for i, v in enumerate(client_codecs_prio)
-	}
-
+	client_codec_prios = _get_codec_prios_from_client(request.COOKIES.get('video_codecs_prio', ''))
 	# sort by client desired order, or transcoding type priority
 	sources.sort(
-		key=lambda i: client_codecs_prio_dct.get(models.get_transcoding_type_by_name(i['type']).short_name) or models.get_transcoding_type_by_name(i['type']).priority,
+		key=lambda i: client_codec_prios.get(models.get_transcoding_type_by_name(i['type']).short_name) or \
+					models.get_transcoding_type_by_name(i['type']).priority,
 		reverse=True
 	)
 	template_data['sources'] = sources
@@ -102,3 +95,17 @@ def _url_for(transcoding: models.Transcoding) -> str:
 		return transcoding.url
 	elif transcoding.upload:
 		return transcoding.upload.file.url
+
+def _get_codec_prios_from_client(prio_string: str) -> Dict[str, int]:
+	"""
+		Get prios from prio string.
+		For they are more important than build-in prios, they have
+		values higher than the max value of the build-in prios.
+	"""
+	max_prio = max(tt.priority for tt in models.transcoding_types) + 1
+	client_codecs_prio = prio_string.split(' ')
+	client_codecs_prio.reverse()
+	return {
+		v: max_prio + i
+		for i, v in enumerate(client_codecs_prio)
+	}
